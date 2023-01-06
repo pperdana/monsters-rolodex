@@ -1,4 +1,7 @@
 import { Component } from "react";
+import CardList from "./components/card-list/card-list.component";
+import "./App.css";
+import SearchBox from "./components/search-box/search-box.component";
 
 class App extends Component {
   constructor() {
@@ -7,11 +10,11 @@ class App extends Component {
       monsters: [],
       searchField: "",
     };
-    // console.log("1. constructor");
+    console.log("1. constructor");
   }
 
   componentDidMount() {
-    // console.log("3. componentDidMount");
+    console.log("3. componentDidMount");
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
       .then((users) =>
@@ -20,35 +23,38 @@ class App extends Component {
             return { monsters: users };
           },
           () => {
-            console.log(this.state);
+            // console.log(this.state);
           }
         )
       );
   }
+
+  onSearchChange = (e) => {
+    // console.log(e.target.value);
+    console.log("This call from onSearchChange function");
+    const searchField = e.target.value.toLocaleLowerCase();
+    this.setState(() => {
+      return { searchField };
+    });
+  };
   render() {
-    // console.log("2. render");
-    const filteredMonsters = this.state.monsters.filter((monster) =>
-      monster.name.toLocaleLowerCase().includes(this.state.searchField)
+    console.log("2. render");
+
+    const { monsters, searchField } = this.state;
+    const { onSearchChange } = this;
+
+    const filteredMonsters = monsters.filter((monster) =>
+      monster.name.toLocaleLowerCase().includes(searchField)
     );
     return (
       <div className="App">
-        <input
-          className="search-box"
-          type="search"
+        <h1 className="app-title">Monster Rolodex</h1>
+        <SearchBox
+          className="monsters-search-box"
+          onChangehandler={onSearchChange}
           placeholder="search monsters"
-          onChange={(e) => {
-            console.log(e.target.value);
-            const searchField = e.target.value.toLocaleLowerCase();
-            this.setState(() => {
-              return { searchField };
-            });
-          }}
         />
-        {filteredMonsters.map((monster) => (
-          <div key={monster.id}>
-            <h1>{monster.name}</h1>
-          </div>
-        ))}
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
