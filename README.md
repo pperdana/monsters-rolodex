@@ -1,5 +1,5 @@
 # Monsters Rolodex
-
+Introducing Monsters rolodex, the webpage that enable to find monsters through the search functionality from robohash api. It's enabling users to effortlessly find monsters by name or keywords.
 
 
 ### Links
